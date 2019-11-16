@@ -170,7 +170,7 @@ def home(request):
 
     # transferred tenant form
     if request.method == 'POST':
-        if 'transfer_button' in request.POST:
+         if 'transfer_button' in request.POST:
             transfer_form = TransferredTenantForm(data=request.POST)
             if transfer_form.is_valid():
                 tenant = transfer_form.cleaned_data['name']
@@ -191,10 +191,9 @@ def home(request):
                 messages.error(request, "Error adding transferred tenant")
     else:
         transfer_form = TransferredTenantForm()
-
     # checkout tenant form
     if request.method == 'POST':
-        if 'checkout_button' in request.POST:
+         if 'checkout_button' in request.POST:
             checkout_form = CheckedOutTenantForm(data=request.POST)
             if checkout_form.is_valid():
                 tenant = checkout_form.cleaned_data['name']
@@ -204,45 +203,45 @@ def home(request):
                     landlord = Landlord.objects.get(unit=unit)
                 except Landlord.DoesNotExist:
                     landlord = None
-                if  landlord:
-                        phone = landlord.Phone
-                        new_check = checkout_form.save(commit=False)
-                        new_check.unit_stayed = db_tenant.unit
-                        db_tenant.unit.occupied = False
-                        db_tenant.unit.save()
-                        db_tenant.active = False
-                        db_tenant.save()
-                        new_check.save()
-                        sms = africastalking.SMS
-                        message = ' tenant in has moved out your house number {}'.format(unit)
-                        cost = 0
-                        m = len(message)
-                        if m <=144:
-                            cost =1
-                        elif m <=304:
-                            cost = 2
-                        elif m <=464:
-                            cost = 3
-                        elif m <= 624:
-                           cost = 4
-                        elif m <=784 :
-                           cost = 5
-                        message_allocated = Allocated_message.objects.get(name='admin')
-                        counter = message_allocated.count
-                        print(counter)
-                        print(phone)
-                        if cost < counter:
-                            message_counter =  SamatarMessageCounter.objects.get(name='admin')
-                            message_counter.total_messages_sent = message_counter.total_messages_sent + 1
-                            message_counter.save()
-                            sender = 'softsearch'
-                            response = sms.send(message, [phone], sender)
-                            counter = counter-cost
-                            message_allocated.count = counter
-                            message_allocated.save()
-                            messages.success(request, "Tenant  successfully checked ou")
-                        else :
-                            messages.error(request, "You dont have sufficent credit to send messages please recharge")
+                if landlord:
+                    phone = landlord.Phone
+                    new_check = checkout_form.save(commit=False)
+                    new_check.unit_stayed = db_tenant.unit
+                    db_tenant.unit.occupied = False
+                    db_tenant.unit.save()
+                    db_tenant.active = False
+                    db_tenant.save()
+                    new_check.save()
+                    sms = africastalking.SMS
+                    message = ' tenant in has moved out your house number {}'.format(unit)
+                    cost = 0
+                    m = len(message)
+                    if m <= 144:
+                        cost = 1
+                    elif m <= 304:
+                        cost = 2
+                    elif m <= 464:
+                        cost = 3
+                    elif m <= 624:
+                        cost = 4
+                    elif m <= 784:
+                        cost = 5
+                    message_allocated = Allocated_message.objects.get(name='admin')
+                    counter = message_allocated.count
+                    print(counter)
+                    print(phone)
+                    if cost < counter:
+                        message_counter = SamatarMessageCounter.objects.get(name='admin')
+                        message_counter.total_messages_sent = message_counter.total_messages_sent + 1
+                        message_counter.save()
+                        sender = 'softsearch'
+                        response = sms.send(message, [phone], sender)
+                        counter = counter - cost
+                        message_allocated.count = counter
+                        message_allocated.save()
+                        messages.success(request, "Tenant  successfully checked ou")
+                    else:
+                        messages.error(request, "You dont have sufficent credit to send messages please recharge")
                 else:
                     new_check = checkout_form.save(commit=False)
                     new_check.unit_stayed = db_tenant.unit
