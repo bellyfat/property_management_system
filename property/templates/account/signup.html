@@ -1,0 +1,50 @@
+{% extends 'account/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<div class="container">
+
+    <form class="form-signin" action="{% url 'account_signup' %}" method="post">
+        
+      <h2 class="form-signin-heading">Register your Account</h2>
+     
+      <div class="login-wrap">
+        
+          <!-- <input type="text" class="form-control" name="email" placeholder="E-mail"  value="{{ form.login}}" autofocus />
+         
+        
+      
+          <input type="password"  name= "password" class="form-control" placeholder="Password" value="{{ form.password }}" /> -->
+          
+          {% csrf_token %}
+          {{ form|crispy }}
+  
+          
+  
+  
+          
+              
+  
+          
+     
+     
+          
+          <button class="btn btn-lg btn-login btn-block" type="submit">Sign up</button>
+         
+          <div class="registration">
+              Already have an account? 
+              <a class="" href="{% url 'account_login' %}">
+                  Login
+              </a>
+          </div>
+  
+      </div>
+  
+        
+    </form>
+  
+  </div>
+
+  {% endblock %}

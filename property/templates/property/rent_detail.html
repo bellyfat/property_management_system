@@ -1,0 +1,51 @@
+{% extends 'property/base.html' %}
+{% load static %}
+{% block body %}
+
+
+<div>
+              <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <div class="bio-graph-heading project-heading " style="background-color: #2a3542">
+                            <strong> [  Rent  Details ] </strong>
+                        </div>
+                        <div class="panel-body bio-graph-info">
+                            <!--<h1>New Dashboard BS3 </h1>-->
+                            <div class="row p-details">
+                                <div class="bio-row">
+                                    <h4><span class="bold"> Unit  </span>: {{ rent.unit }}</h4>
+                                </div>
+                                <div class="bio-row">
+                                    <h4><span class="bold">Tenant</span>:
+                                      {% for r in rent.unit.unit_tenant.all %}
+                                       {{r.name}}</h4>
+                                       {% endfor %}
+                                </div>
+                                <div class="bio-row">
+                                    <h4><span class="bold">Date paid</span>:{{ rent.date_paid}}</h4>
+                                </div>
+                                <div class="bio-row">
+                                    <h4><span class="bold">Amount paid</span>:{{ rent.Amount_paid}}</h4>
+                                </div>
+                                <div class="bio-row">
+                                    <h4><span class="bold">Balance</span>:{{ rent.Balance}}</h4>
+                                </div>
+                                <div class="bio-row">
+                                    <h4><span class="bold">Reciept Number</span>:{{ rent.Reciept_no}}</h4>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                </div>
+
+            </div>
+</div>
+            {% endblock %}
