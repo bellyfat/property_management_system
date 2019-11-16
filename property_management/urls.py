@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import re_path, include,path
-from property.tasks import hello
+
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
@@ -23,4 +23,3 @@ urlpatterns = [
     re_path(r'^', include('property.urls', namespace='property')),
 
     ]
-hello(repeat=2592000, repeat_until=None)

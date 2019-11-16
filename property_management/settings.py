@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'background_task',
     'property',
     'crispy_forms',
     'allauth',
@@ -98,8 +97,8 @@ AUTHENTICATION_BACKENDS = (
 WSGI_APPLICATION = 'property_management.wsgi.application'
 
 
-Database
-https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
