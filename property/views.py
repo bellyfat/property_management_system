@@ -560,7 +560,7 @@ def delete_landlord(request, id):
 
 def delete_tenant(request, id):
     single_tenant = Tenant.objects.get(id=id)
-    db_unit = Unit.objects.get(unit_number=single_tenant.unit.unit_number)
+    db_unit = Unit.objects.get(id=single_tenant.unit.id)
     db_unit.occupied = False
     db_unit.save()
     single_tenant.delete()
@@ -740,7 +740,7 @@ def add_landlord(request, id):
             landlord_form = LandlordForm(data=request.POST)
             if landlord_form.is_valid():
                 new_land_form = landlord_form.save(commit=False)
-                unit = Unit.objects.get(unit_number=unit.unit_number)
+                unit = Unit.objects.get(id=unit.id)
                 unit.landlord_assigned = True
                 unit.save()
                 new_land_form.unit = unit
@@ -910,7 +910,7 @@ def add_checkout(request, id):
                             counter = counter-cost
                             message_allocated.count = counter
                             message_allocated.save()
-                            messages.success(request, "Tenant  successfully checked ou")
+                            messages.success(request, "Tenant  successfully checked out")
                         else :
                             messages.error(request, "You dont have sufficent credit to send messages please recharge")
                 else:

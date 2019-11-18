@@ -327,10 +327,7 @@
     <section class="panel">
       <header class="panel-heading">
         All Landlords List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="{% url 'account_signup' %}" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Landlord</a>
-        </span>
+
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="landlord">
         <thead>
@@ -402,10 +399,7 @@
     <section class="panel">
       <header class="panel-heading">
         All Tenants List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-tenant" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Tenant</a>
-        </span>
+
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="tenant">
         <thead>
@@ -491,10 +485,7 @@
     <section class="panel">
       <header class="panel-heading">
         All Units List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-unit" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Unit</a>
-        </span>
+
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="unit">
 
@@ -576,10 +567,6 @@
     <section class="panel">
       <header class="panel-heading">
         All Transferred Tenants List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-transfer" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Transferred Tenant</a>
-        </span>
       </header>
       <table class="table table-hover p-table responsive" width="100%" id="trans">
 
@@ -656,14 +643,9 @@
     <section class="panel">
       <header class="panel-heading">
         All Checked out tenant List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-checkout" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Checked Out Tenant</a>
-        </span>
       </header>
       <table class="table table-hover p-table   responsive" width="100%" id="checked">
-
-        <thead>
+      <thead>
           <tr>
             <th>Tenant Name</th>
             <th>Unit Stayed</th>
@@ -732,10 +714,6 @@
     <section class="panel">
       <header class="panel-heading">
         All Rents List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-rent" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Rent</a>
-        </span>
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="rent">
         <thead>
@@ -845,10 +823,7 @@
     <section class="panel">
       <header class="panel-heading">
         All Units List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-          <a href="#tab-add-unit" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Unit</a>
-        </span>
+
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="unit">
 
@@ -929,10 +904,7 @@
     <section class="panel">
       <header class="panel-heading">
         Debtors List
-        <span class="pull-right">
-          <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
 
-        </span>
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="debtors">
         <thead>
@@ -1005,17 +977,12 @@
   </div>
   <!--display landlord end-->
 
-  <!--display landlord start-->
+<!-- expenses list -->
   <div class="tab-pane" id="tab-display-expense">
     <!-- page start-->
     <section class="panel">
       <header class="panel-heading">
-        All Expenses List
-        <span class="pull-right">
-          <div class="row">
-            <button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button>
-            <a href="#tab-add-expense" role="tab" data-toggle="tab" class=" btn btn-success btn-xs"> Create New Expense</a>
-        </span>
+        All expenses List
       </header>
       <table class="table table-hover p-table  responsive" width="100%" id="expenses">
         <thead>
@@ -1023,79 +990,87 @@
             <th>Property</th>
             <th>Amount</th>
             <th>Description</th>
-            <th>Month</th>
+            <th>month</th>
             <th>Year</th>
+            <th>Date</th>
             <th>Actions</th>
           </tr>
-      </thead>
+        </thead>
         <tfoot>
           <tr>
             <th>Property</th>
             <th>Amount</th>
             <th>Description</th>
-            <th>Month</th>
+            <th>month</th>
             <th>Year</th>
+            <th>Date</th>
+            <th>Actions</th>
           </tr>
         </tfoot>
         <tbody>
           {% for exp in expenses %}
-          <tr>
-            <td class="p-name">
-              <a href="#">{{exp.property_code}}</a>
-            </td>
-            <td class="p-name">
-              {{exp.Amount}}
-            </td>
-            <td class="p-name">
-              <a href="#">{{exp.Description}}</a>
-            </td>
-            <td class="p-name">
-              <a href="#">{{exp.get_month_display}}</a>
-            </td>
-            <td class="p-name">
-              <a href="#">{{exp.year}}</a>
-            </td>
-            <td>
-              <a href="{% url 'property:expense_detail' exp.pk %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View
-              </a>
-              <a href="{% url 'property:edit_expense' exp.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-              <a role="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modalConfi"><i class="fa fa-trash-o"></i> Delete </a>
+            <tr>
 
-              <!--Modal: modalConfirmDelete-->
-              <div class="modal fade" id="modalConfi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-                  <!--Content-->
-                  <div class="modal-content text-center">
-                    <!--Header-->
-                    <div class="modal-header d-flex justify-content-center">
-                      <p class="heading">Are you sure?</p>
-                    </div>
+                <td class="p-name">
+                  <a href="#">{{exp.property_code}}</a>
+                </td>
+
+                <td class="p-name">
+                  {{exp.Amount}}
+                </td>
+                <td class="p-name">
+                  <a href="#">{{exp.Description}}</a>
+                </td>
+                <td class="p-name">
+                  {{exp.get_month_display}}
+                </td>
+                <td class="p-name">
+                  {{exp.year}}
+                </td>
+                <td class="p-name">
+                  {{exp.Date}}
+                </td>
+                <td>
+                  <a href="{% url 'property:expense' exp.pk %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View
+                  </a>
+                  <a href="{% url 'property:edit_expense' exp.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                  <a role="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modalConfir"><i class="fa fa-trash-o"></i> Delete </a>
+
+                  <!--Modal: modalConfirmDelete-->
+                  <div class="modal fade" id="modalConfir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+                      <!--Content-->
+                      <div class="modal-content text-center">
+                        <!--Header-->
+                        <div class="modal-header d-flex justify-content-center">
+                          <p class="heading">Are you sure?</p>
+                        </div>
 
 
-                    <!--Footer-->
-                    <div class="modal-footer flex-center" style="text-align:center">
-                      <a href="{% url 'property:expense' exp.id %}" class="btn  btn-success">Yes</a>
-                      <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                        <!--Footer-->
+                        <div class="modal-footer flex-center" style="text-align:center">
+                          <a href="{% url 'property:expense' exp.id %}" class="btn  btn-success">Yes</a>
+                          <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                        </div>
+                      </div>
+                      <!--/.Content-->
                     </div>
                   </div>
-                  <!--/.Content-->
-                </div>
-              </div>
-              <!--Modal: modalConfirmDelete-->
-            </td>
-            {% empty %}
-            <td class="p-name">
-              <a>You haven't added any expenses yet</a>
-            </td>
-
-          </tr>
-          {% endfor %}
+                  <!--Modal: modalConfirmDelete-->
+                </td>
+                {% empty %}
+                <td class="p-name">
+                  <a>You haven't added any expense yet</a>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
-      </table>
-    </section>
-    <!-- page end-->
+    </table>
+  </section>
+</div>
 
-  </div>
+
+
   <div class="tab-pane" id="tab-display-sms">
     <!-- page start-->
     <section class="panel">

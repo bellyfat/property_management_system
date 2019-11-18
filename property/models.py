@@ -145,7 +145,7 @@ class Expense(models.Model):
     choices = [(k, v) for k, v in MONTHS.items()]
     month = models.IntegerField(choices=choices, blank=True, null=True,default=datetime.datetime.now().month)
     property_code = models.ForeignKey(Property,on_delete=models.CASCADE)
-    Description = models.CharField(max_length=300)
+    Description = models.TextField(max_length=300)
     Amount = models.FloatField()
     Date = models.DateField(("Date"), default=date.today)
 

@@ -29,7 +29,7 @@ DEBUG = True
 # APIKEY = config('APIKEY')
 
 
-ALLOWED_HOSTS = ['157.245.117.124']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
