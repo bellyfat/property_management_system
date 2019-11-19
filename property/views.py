@@ -323,7 +323,7 @@ def home(request):
                 message = message_form.cleaned_data['message']
                 send_to_all = message_form.cleaned_data['send_to_all']
                 send_to_all = str(send_to_all)
-                if send_to_all:
+                if send_to_all == 'True':
                     tenant = Tenant.objects.filter(active=True)
                     sms = africastalking.SMS
                     message_allocated = Allocated_message.objects.get(name='admin')

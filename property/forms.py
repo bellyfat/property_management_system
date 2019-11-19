@@ -58,7 +58,7 @@ class CheckedOutTenantForm(forms.ModelForm):
 
 
 class RentForm(forms.ModelForm):
-    Reciept_no = forms.CharField(label='Receipt Number or Transaction ID')
+    Reciept_no = forms.CharField(label='Receipt Number or Transaction ID',required = False)
 
     class Meta:
         model = Rent
