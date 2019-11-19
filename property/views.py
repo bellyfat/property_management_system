@@ -653,17 +653,17 @@ def send_reminder_sms(request):
 
 
 def signup_view(request):
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        form.save()
-        username = form.cleaned_data.get('username')
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password1')
-
-        user = authenticate(email=email, password=password)
-        login(request, user)
-        return redirect('property:home')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            return redirect('property:home')
+    else:
+        form = SignUpForm()
     return render(request, 'property/signup.html', {'form': form})
+
 
 
 def sender(request):
