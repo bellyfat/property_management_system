@@ -683,14 +683,22 @@ def add_rent(request, id):
         if 'rent_button' in request.POST:
             rent_form = RentForm(data=request.POST)
             if rent_form.is_valid():
+                amount_paid = rent_form.cleaned_data['Amount_paid']
+                month = rent_form.cleaned_data['month']
+                year = rent_form.cleaned_data['year']
+                amount_paid = str(amount_paid)
+                amount_paid = float(amount_paid)
                 new_rent_form = rent_form.save(commit=False)
-                print(unit)
                 tenant = Tenant.objects.get(unit=unit)
                 phone = tenant.Phone
+                name = tenant.name
+                monthly_rent = unit.monthly_rent
+                balance = monthly_rent - amount_paid
                 new_rent_form.unit = unit
                 new_rent_form.save()
+                print(month)
                 sms = africastalking.SMS
-                message = 'Thank you for paying your rent\n Regards SAMATAR'
+                message = 'Dear {}, we thank you for paying your rent Ksh.{} for month of {}/{},\nBalance ksh.{}\n Regards SAMATAR.'.format(name,amount_paid,month,year,balance)
                 cost = 0
                 m = len(message)
                 if m <= 144:
@@ -756,7 +764,7 @@ def add_landlord(request, id):
 
 def detailed_property_landlord(request, id):
     property = Property.objects.get(id=id)
-    units = Unit.objects.filter(property__name=property.name, landlord_assigned=False)
+    units = Unit.objects.filter(property__name=property.name, landlord_assigned=False).order_by('-date_added',)
     return render(request, 'property/detailed_property_landlord.html', {'units': units})
 
 
@@ -769,15 +777,17 @@ def add_tenant(request, id):
             if tenant_form.is_valid():
                 new_tenant_form = tenant_form.save(commit=False)
                 phone = None
+                name = None
                 for p in unit.unit_landlord.all():
                     phone = p.Phone
+                    name = p.name
                 unit.occupied = True
                 unit.save()
                 new_tenant_form.unit = unit
                 new_tenant_form.save()
                 if phone != None:
                         sms = africastalking.SMS
-                        message = 'You have a new tenant in your house number {}'.format(unit)
+                        message = 'Dear {},You have a new tenant in your house number {},\nRegards SAMATAR.'.format(name,unit)
                         cost = 0
                         m = len(message)
                         if m <=144:
@@ -824,6 +834,8 @@ def detailed_property_tenant(request, id):
 
 def add_transferred_tenant(request, id):
     transfer_form = None
+    phone = None
+    phone1 = None
     unit = Unit.objects.get(id=id)
     if request.method == 'POST':
         if 'transfer_button' in request.POST:
@@ -837,13 +849,89 @@ def add_transferred_tenant(request, id):
                 new_transfer_form.old_unit = db_tenant.unit
                 new_transfer_form.name = db_tenant
                 db_tenant.unit.occupied = False
+                for p in db_tenant.unit.unit_landlord.all():#old landlord number
+                    phone = p.Phone
+                    name = p.name
+                for p in new_unit.unit_landlord.all():#new landlord number
+                    phone1 = p.Phone
+                    name1 = p.name
                 db_tenant.unit.save()
                 db_tenant.unit = new_unit
                 db_tenant.unit.occupied = True
                 db_tenant.unit.save()
                 db_tenant.save()
                 new_transfer_form.save()
-                messages.success(request, "Tenant transferred successfully")
+                cheker1=False
+                if phone != None : #send text to privious LandLord
+                        sms = africastalking.SMS
+                        message = 'Dear {},tenant has been transferred out of your unit number {}\nRegards SAMATAR.'.format(name,unit)
+                        cost = 0
+                        m = len(message)
+                        if m <=144:
+                            cost =1
+                        elif m <=304:
+                            cost = 2
+                        elif m <=464:
+                            cost = 3
+                        elif m <= 624:
+                           cost = 4
+                        elif m <=784 :
+                           cost = 5
+                        message_allocated = Allocated_message.objects.get(name='admin')
+                        counter = message_allocated.count
+                        print(counter)
+                        if cost < counter:
+                            message_counter =  SamatarMessageCounter.objects.get(name='admin')
+                            message_counter.total_messages_sent = message_counter.total_messages_sent + 1
+                            message_counter.save()
+                            sender = 'softsearch'
+                            response = sms.send(message, [phone], sender)
+                            counter = counter-cost
+                            message_allocated.count = counter
+                            message_allocated.save()
+                            cheker1 = True
+                            # messages.success(request, "Tenant transfered successfully")
+                        else :
+                            messages.error(request, "You dont have sufficent credit to send messages please recharge")
+
+                else:
+                    messages.success(request, "Tenant transferred successfully")
+                cheker2 =False
+                if phone1 != None : #send text to new LandLord
+                        sms = africastalking.SMS
+                        message = 'Dear {},tenant has been transferred into your unit number {}\nRegards SAMATAR.'.format(name1,new_unit)
+                        cost = 0
+                        m = len(message)
+                        if m <=144:
+                            cost =1
+                        elif m <=304:
+                            cost = 2
+                        elif m <=464:
+                            cost = 3
+                        elif m <= 624:
+                           cost = 4
+                        elif m <=784 :
+                           cost = 5
+                        message_allocated = Allocated_message.objects.get(name='admin')
+                        counter = message_allocated.count
+                        print(counter)
+                        if cost < counter:
+                            message_counter =  SamatarMessageCounter.objects.get(name='admin')
+                            message_counter.total_messages_sent = message_counter.total_messages_sent + 1
+                            message_counter.save()
+                            sender = 'softsearch'
+                            response = sms.send(message, [phone], sender)
+                            counter = counter-cost
+                            message_allocated.count = counter
+                            message_allocated.save()
+                            cheker2 = True
+                        else :
+                            messages.error(request, "You dont have sufficent credit to send messages please recharge")
+                if cheker1 and cheker2 :
+                    messages.success(request, "Tenant transferred successfully")
+                else:
+                    messages.success(request, "Tenant transferred successfully")
+
                 return redirect('property:home')
             else:
                 messages.error(request, "Error adding transferred tenant")
@@ -875,16 +963,18 @@ def add_checkout(request, id):
                     landlord = None
                 if  landlord:
                         phone = landlord.Phone
+                        name = landlord.name
                         new_check = checkout_form.save(commit=False)
                         new_check.unit_stayed = db_tenant.unit
                         new_check.name = db_tenant
-                        db_tenant.unit.occupied = False
-                        db_tenant.unit.save()
-                        db_tenant.active = False
-                        db_tenant.save()
+                        # db_tenant.unit.occupied = False
+                        # db_tenant.unit.save()
+                        new_unit = Unit.objects.create(property=unit.property,floor_number=unit.floor_number,monthly_rent=unit.monthly_rent,unit_number=unit.unit_number)
+                        Landlord.objects.create(name=landlord.name,ID_or_Passport=landlord.ID_or_Passport,Phone=landlord.Phone,unit=new_unit)
                         new_check.save()
+                        db_tenant.unit.delete()
                         sms = africastalking.SMS
-                        message = ' tenant in has moved out your house number {}'.format(unit)
+                        message = 'Dear {} tenant has moved out your house number {}\nRegards SAMATAR.'.format(name,unit)
                         cost = 0
                         m = len(message)
                         if m <=144:
@@ -917,11 +1007,9 @@ def add_checkout(request, id):
                     new_check = checkout_form.save(commit=False)
                     new_check.unit_stayed = db_tenant.unit
                     new_check.name = db_tenant
-                    db_tenant.unit.occupied = False
-                    db_tenant.unit.save()
-                    db_tenant.active = False
-                    db_tenant.save()
+                    new_unit = Unit.objects.create(property=unit.property,floor_number=unit.floor_number,monthly_rent=unit.monthly_rent,unit_number=unit.unit_number)
                     new_check.save()
+                    db_tenant.unit.delete()
                     messages.success(request, "Tenant  successfully checked out")
 
                 return redirect('property:home')

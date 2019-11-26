@@ -27,11 +27,12 @@ class Unit(models.Model):
     date_added = models.DateField(auto_now_add=True, null=True)
     property = models.ForeignKey(Property,on_delete=models.CASCADE)
     unit_number = models.CharField(max_length=300)
+
     floor_CHOICES = [('Ground', 'Ground'),
     ('Parking-Bay', 'Parking-Bay'),]
-    for r in range(1, 40):
+    for r in range(1,10):
         floor_CHOICES.append((num2words(r,to = 'ordinal'),num2words(r,to = 'ordinal')))
-    floor_number =models.CharField(max_length=300,choices=floor_CHOICES,null=True)
+    floor_number =models.CharField(max_length=300,null=True,choices=floor_CHOICES)
     monthly_rent = models.FloatField()
     occupied = models.BooleanField(default=False)
     landlord_assigned = models.BooleanField(default=False)
@@ -59,7 +60,7 @@ class Landlord(models.Model):
 
 class Tenant(models.Model):
     date_added = models.DateField(auto_now_add=True, null=True)
-    name = models.CharField(max_length=300, unique=True)
+    name = models.CharField(max_length=300, unique=True,null=True)
     ID_or_Passport = models.CharField(max_length=300)
     phone_regex = RegexValidator(regex=r'^(?:\+)', message="Phone number must be entered in the format: '+2549999999'. Up to 15 digits allowed.")
     Phone = models.CharField(max_length=15, validators=[phone_regex])
@@ -105,7 +106,7 @@ class Rent(models.Model):
     choices = [(k, v) for k, v in MONTHS.items()]
     month = models.IntegerField(choices=choices, blank=True, null=True,default=datetime.datetime.now().month)
     date_paid = models.DateField(("Date"), default=date.today,null=True,blank=True)
-    unit = models.ForeignKey(Unit,on_delete=models.CASCADE,null=True)
+    unit = models.ForeignKey(Unit,on_delete=models.CASCADE,null=True,related_name='unit_rent')
     Amount_paid = models.FloatField()
     Balance = models.FloatField(null=True)
     mode_of_payment = models.CharField(max_length=50, choices=PAYMENT, null=True)
@@ -118,9 +119,6 @@ class Rent(models.Model):
 
     year = models.IntegerField(choices=YEAR_CHOICES,
            default=datetime.datetime.now().year,null=True,blank=True)
-
-    def __str__(self):
-        return '{}'.format(self.Amount_paid)
 
     def Balance(self):
         if self.Amount_paid < self.unit.monthly_rent:

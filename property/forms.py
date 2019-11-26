@@ -7,6 +7,7 @@ from django.utils.dates import MONTHS
 from django.core.validators import RegexValidator
 from datetime import date
 import datetime
+from num2words import num2words
 
 class PropertyForm(forms.ModelForm):
     class Meta:
@@ -23,9 +24,20 @@ class LandlordForm(forms.ModelForm):
 
 
 class UnitForm(forms.ModelForm):
+    # floor_number = forms.ChoiceField(choices=[])
+    # properties = Property.objects.all()
     class Meta:
         model = Unit
         fields = ('property', 'unit_number', 'floor_number', 'monthly_rent')
+    # def __init__(self, *args, **kwargs):
+    #     super(UnitForm, self).__init__(*args, **kwargs)
+    #     for property in self.properties:
+    #
+    #         floor_CHOICES = [('Ground', 'Ground'),
+    #         ('Parking-Bay', 'Parking-Bay'),]
+    #         for r in range(1,property.number_of_floors+1):
+    #             floor_CHOICES.append((num2words(r,to = 'ordinal'),num2words(r,to = 'ordinal')))
+    #     self.fields['floor_number'] = forms.ChoiceField(choices=floor_CHOICES)
 
 
 class TenantForm(forms.ModelForm):
