@@ -15,7 +15,7 @@ config==0.4.2
 contextlib2==0.5.5
 cssselect2==0.2.2
 defusedxml==0.6.0
-Django==2.2.6
+Django==2.2.8
 django-advanced-reports==0.9.24
 django-allauth==0.40.0
 django-background-tasks==1.2.0
